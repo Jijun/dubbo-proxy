@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "org.apache.dubbo.proxy.proto";
+option optimize_for = SPEED;
+
+package dubbo;
+
+service ProxyService {
+    rpc InvokeProxy (ProxyRequest) returns (ProxyReply) {}
+}
+  
+message ProxyRequest {
+	 string application = 1;
+	 string interfaceName=2;
+	 string version = 3;
+	 string group = 4;
+	 string method=5;
+	 repeated string types=6;
+	 string values=7;
+}
+  
+message ProxyReply {
+	string result=1;
+}

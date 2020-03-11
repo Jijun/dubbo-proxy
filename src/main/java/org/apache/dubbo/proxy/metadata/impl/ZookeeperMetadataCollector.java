@@ -1,7 +1,5 @@
 package org.apache.dubbo.proxy.metadata.impl;
 
-import org.apache.dubbo.proxy.metadata.MetadataCollector;
-import org.apache.dubbo.proxy.utils.Constants;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.retry.ExponentialBackoffRetry;
@@ -9,7 +7,8 @@ import org.apache.dubbo.common.URL;
 import org.apache.dubbo.common.logger.Logger;
 import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.metadata.identifier.MetadataIdentifier;
-
+import org.apache.dubbo.proxy.metadata.MetadataCollector;
+import org.apache.dubbo.proxy.utils.Constants;
 public class ZookeeperMetadataCollector implements MetadataCollector {
 
     private static final Logger logger = LoggerFactory.getLogger(ZookeeperMetadataCollector.class);
