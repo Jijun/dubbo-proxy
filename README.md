@@ -42,6 +42,12 @@ message ProxyReply {
 
 ```
 
+### Get Started
+
+ [Get Started](https://github.com/Jijun/grpc-dubbo-proxy/wiki/get-started)
+
+
+### Notice
 
 * In the Dubbo 2.7 version  and later updates versions, paramTypes is optional data, if not filled in, gRPC Dubbo Proxy would get related mapping data from metadata center.
 * You can set registry address and metadata center address in `application-{profile}.yml`
