@@ -57,10 +57,10 @@ public final class ProxyServiceGrpcImpl extends ProxyServiceImplBase {
 					paramValues.length);
 		}
 		ReferenceConfig<GenericService> reference = getReferencenConfig(interfaceName, group, version);
-		ReferenceConfigCache refConfigCache = ReferenceConfigCache.getCache();
-		GenericService genericService = refConfigCache.get(reference);
 		Object result = null;
 		try {
+			ReferenceConfigCache refConfigCache = ReferenceConfigCache.getCache();
+			GenericService genericService = refConfigCache.get(reference);
 			result = genericService.$invoke(methodName, paramTypes, paramValues);
 		} catch (Exception e) {
 			logger.error("Generic invoke failed", e);
