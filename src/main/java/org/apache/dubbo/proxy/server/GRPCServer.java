@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,8 +12,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import io.grpc.BindableService;
+import io.grpc.Metadata;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
+import io.grpc.ServerCall;
+import io.grpc.ServerCall.Listener;
+import io.grpc.ServerCallHandler;
+import io.grpc.ServerInterceptor;
 import io.grpc.protobuf.services.ProtoReflectionService;
 
 @Component
@@ -31,7 +35,15 @@ public class GRPCServer {
 
 	@PostConstruct
 	public void start() {
-		ServerBuilder<?> serverBuilder = ServerBuilder.forPort(grpcServerPort);
+		ServerBuilder<?> serverBuilder = ServerBuilder.forPort(grpcServerPort)
+				.intercept(new ServerInterceptor() {
+			@Override
+			public <ReqT, RespT> Listener<ReqT> interceptCall(ServerCall<ReqT, RespT> call, Metadata headers,
+					ServerCallHandler<ReqT, RespT> next) {
+				call.setCompression("gzip");
+				return next.startCall(call, headers);
+			}
+		});
 		serverBuilder.addService(grpcService);
 		// for grpc_cli to list service
 		serverBuilder.addService(ProtoReflectionService.newInstance());
@@ -52,7 +64,7 @@ public class GRPCServer {
 			server.awaitTermination();
 		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
-		} 
+		}
 	}
 
 }
