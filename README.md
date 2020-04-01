@@ -1,7 +1,7 @@
 [中文版本](README_zh.md)  
 ## gRPC Dubbo Proxy
-gRPC Dubbo Proxy, a gRPC gateway of Dubbo, switch from gRPC request to Dubbo protocol，then invoke Dubbo service and return to the result. Later Dubbo Proxy would combine several features, including circuit breaker, current-limiting, api management. 
-
+gRPC Dubbo Proxy, a gRPC gateway of Dubbo, switch from gRPC request to Dubbo protocol，then invoke Dubbo service and return to the result. 
+relying on gRPC high performance and message compression, the message body is more smaller than Dubbo payload.
 
 ### instructions
 
