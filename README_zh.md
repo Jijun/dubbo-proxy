@@ -38,6 +38,9 @@ message ProxyReply {
 	string result=1;
 }
 ```
+### 开始使用
+
+ [开始使用](https://github.com/Jijun/grpc-dubbo-proxy/wiki/get-started)
 
 * 在Dubbo 2.7及后续版本中，paramTypes为可选，如果不填写，Dubbo Proxy会在元数据中心获取对应的参数类型。
 * 可以在`application.yml`中指定注册中心和元数据中心的地址
