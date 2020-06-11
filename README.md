@@ -11,7 +11,7 @@ SPRING_PROFILES_ACTIVE=product mvn clean spring-boot:run
  
 Group and version is the mapping data in Dubbo service. 
 
-### gRPC ProtoBuf: 
+### gRPC Protobuf: 
 
 ```proto
 syntax = "proto3";
@@ -44,7 +44,12 @@ message ProxyReply {
 
 ### Get Started
 
- [Get Started](https://github.com/Jijun/grpc-dubbo-proxy/wiki/get-started)
+#### NodeJS gRPC Client
+https://github.com/Jijun/grpc-dubbo-proxy/wiki/Get-Started#grpc-node-client
+
+#### Java gRPC Client 
+https://github.com/Jijun/grpc-dubbo-proxy/wiki/Get-Started#grpc-java-client
+
 
 
 ### Notice
