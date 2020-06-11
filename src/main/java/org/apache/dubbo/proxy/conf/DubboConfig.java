@@ -16,11 +16,11 @@ public class DubboConfig {
 	@Value("${proxy.registry.address}")
 	private String registryAddress;
 
-	@Value("${proxy.registry.group}")
-	private String group;
-
 	@Value("${proxy.metadata-report.address}")
 	private String metadataAddress;
+	
+	@Value("${spring.application.name}")
+	private String applicationName;
 
 	public DubboConfig() {
 		System.setProperty("dubbo.application.logger", "slf4j");
@@ -29,7 +29,7 @@ public class DubboConfig {
 	@Bean
 	public ApplicationConfig appConfig() {
 		ApplicationConfig application = new ApplicationConfig();
-		application.setName("grpc-dubbo-proxy");
+		application.setName(applicationName);
 		return application;
 	}
 

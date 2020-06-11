@@ -14,13 +14,18 @@
 	<version>1.0.0</version>
 	<name>grpc-dubbo-proxy</name>
 	<description>a grpc proxy server to invoke dubbo service</description>
-
+	<developers>
+		<developer>
+			<name>jijun</name>
+			<email>jijunlx@gmail.com</email>
+		</developer>
+	</developers>
 	<properties>
 		<java.version>1.8</java.version>
 		<slf4j.version>1.7.26</slf4j.version>
 		<curator.version>2.12.0</curator.version>
 		<dubbo.version>2.7.3</dubbo.version>
-		<grpc.version>1.27.2</grpc.version>
+		<grpc.version>1.28.0</grpc.version>
 	</properties>
 
 	<dependencyManagement>
@@ -69,22 +74,22 @@
 	</dependencyManagement>
 
 	<dependencies>
-			<dependency>
-				<groupId>io.grpc</groupId>
-				<artifactId>grpc-netty-shaded</artifactId>
-			</dependency>
-			<dependency>
-				<groupId>io.grpc</groupId>
-				<artifactId>grpc-protobuf</artifactId>
-			</dependency>
-			<dependency>
-				<groupId>io.grpc</groupId>
-				<artifactId>grpc-stub</artifactId>
-			</dependency>
-			<dependency>
-				<groupId>io.grpc</groupId>
-				<artifactId>grpc-services</artifactId>
-			</dependency>
+		<dependency>
+			<groupId>io.grpc</groupId>
+			<artifactId>grpc-netty-shaded</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.grpc</groupId>
+			<artifactId>grpc-protobuf</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.grpc</groupId>
+			<artifactId>grpc-stub</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.grpc</groupId>
+			<artifactId>grpc-services</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>

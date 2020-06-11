@@ -15,7 +15,7 @@ private static final long serialVersionUID = 0L;
   private ProxyRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private ProxyRequest() {
+  public ProxyRequest() {
     application_ = "";
     interfaceName_ = "";
     version_ = "";

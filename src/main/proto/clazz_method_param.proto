@@ -3,6 +3,7 @@ syntax = "proto3";
 option java_multiple_files = true;
 option java_package = "org.apache.dubbo.proxy.proto";
 option optimize_for = SPEED;
+option go_package = ".;org_apache_dubbo_proxy_proto";
 
 package dubbo;
 

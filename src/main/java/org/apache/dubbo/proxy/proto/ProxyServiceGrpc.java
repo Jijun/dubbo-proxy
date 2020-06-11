@@ -18,7 +18,7 @@ import static io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall;
 /**
  */
 @javax.annotation.Generated(
-    value = "by gRPC proto compiler (version 1.26.0)",
+    value = "by gRPC proto compiler (version 1.28.0)",
     comments = "Source: proto/clazz_method_param.proto")
 public final class ProxyServiceGrpc {
 

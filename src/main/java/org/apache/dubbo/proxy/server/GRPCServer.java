@@ -7,7 +7,6 @@ import javax.annotation.PostConstruct;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -30,8 +29,12 @@ public class GRPCServer {
 
 	@Value("${grpc.server.port}")
 	private int grpcServerPort;
-	@Autowired
-	private BindableService grpcService;
+
+	private final BindableService grpcService;
+	
+	public GRPCServer(BindableService grpcService) {
+		this.grpcService = grpcService;
+	}
 
 	@PostConstruct
 	public void start() {
