@@ -11,11 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import io.grpc.BindableService;
-import io.grpc.Metadata;
 import io.grpc.Server;
-import io.grpc.ServerCall;
-import io.grpc.ServerCall.Listener;
-import io.grpc.ServerCallHandler;
 import io.grpc.ServerInterceptor;
 import io.grpc.netty.NettyServerBuilder;
 import io.grpc.protobuf.services.ProtoReflectionService;
@@ -94,11 +90,6 @@ public class GRPCServer {
 		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
 		}
-
-	}
-
-	public static void main(String[] args) {
-		System.out.println(System.getProperties());
 
 	}
 }
