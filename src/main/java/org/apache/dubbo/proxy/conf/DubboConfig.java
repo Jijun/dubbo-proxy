@@ -18,9 +18,12 @@ public class DubboConfig {
 
 	@Value("${proxy.metadata-report.address}")
 	private String metadataAddress;
-	
+
 	@Value("${spring.application.name}")
 	private String applicationName;
+
+	@Value("${dubbo.application.qos.enable:false}")
+	private Boolean qosEnable;
 
 	public DubboConfig() {
 		System.setProperty("dubbo.application.logger", "slf4j");
@@ -29,6 +32,7 @@ public class DubboConfig {
 	@Bean
 	public ApplicationConfig appConfig() {
 		ApplicationConfig application = new ApplicationConfig();
+		application.setQosEnable(qosEnable);
 		application.setName(applicationName);
 		return application;
 	}

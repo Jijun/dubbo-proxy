@@ -13,12 +13,16 @@ import org.springframework.stereotype.Component;
 import io.grpc.BindableService;
 import io.grpc.Metadata;
 import io.grpc.Server;
-import io.grpc.ServerBuilder;
 import io.grpc.ServerCall;
 import io.grpc.ServerCall.Listener;
 import io.grpc.ServerCallHandler;
 import io.grpc.ServerInterceptor;
+import io.grpc.netty.NettyServerBuilder;
 import io.grpc.protobuf.services.ProtoReflectionService;
+import io.netty.channel.EventLoopGroup;
+import io.netty.channel.ServerChannel;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.nio.NioServerSocketChannel;
 
 @Component
 public class GRPCServer {
@@ -30,23 +34,45 @@ public class GRPCServer {
 	@Value("${grpc.server.port}")
 	private int grpcServerPort;
 
+	private final ServerInterceptor compressionServerInterceptor;
+
 	private final BindableService grpcService;
-	
-	public GRPCServer(BindableService grpcService) {
+
+	public GRPCServer(BindableService grpcService, ServerInterceptor compressionServerInterceptor) {
 		this.grpcService = grpcService;
+		this.compressionServerInterceptor = compressionServerInterceptor;
 	}
 
 	@PostConstruct
 	public void start() {
-		ServerBuilder<?> serverBuilder = ServerBuilder.forPort(grpcServerPort)
-				.intercept(new ServerInterceptor() {
-			@Override
-			public <ReqT, RespT> Listener<ReqT> interceptCall(ServerCall<ReqT, RespT> call, Metadata headers,
-					ServerCallHandler<ReqT, RespT> next) {
-				call.setCompression("gzip");
-				return next.startCall(call, headers);
-			}
-		});
+		EventLoopGroup boss = null;
+		EventLoopGroup worker = null;
+		Class<? extends ServerChannel> channelType = null;
+
+		try {
+			// These classes are only available on linux.performance tune
+			Class<?> groupClass = Class.forName("io.netty.channel.epoll.EpollEventLoopGroup");
+			@SuppressWarnings("unchecked")
+			Class<? extends ServerChannel> channelClass = (Class<? extends ServerChannel>) Class
+					.forName("io.netty.channel.epoll.EpollServerSocketChannel");
+			boss = (EventLoopGroup) groupClass.newInstance();
+			worker = (EventLoopGroup) groupClass.newInstance();
+			channelType = channelClass;
+			logger.info("start grpc server using EpollEventLoopGroup");
+
+		} catch (Throwable e) {
+			logger.info("start grpc server using NioEventLoopGroup");
+			boss = new NioEventLoopGroup();
+			worker = new NioEventLoopGroup();
+			channelType = NioServerSocketChannel.class;
+		}
+
+		NettyServerBuilder serverBuilder = NettyServerBuilder.forPort(grpcServerPort)
+				.intercept(compressionServerInterceptor)
+				.bossEventLoopGroup(boss)
+				.workerEventLoopGroup(worker)
+				.channelType(channelType).directExecutor();
+		
 		serverBuilder.addService(grpcService);
 		// for grpc_cli to list service
 		serverBuilder.addService(ProtoReflectionService.newInstance());
@@ -68,6 +94,11 @@ public class GRPCServer {
 		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
 		}
+
 	}
 
+	public static void main(String[] args) {
+		System.out.println(System.getProperties());
+
+	}
 }

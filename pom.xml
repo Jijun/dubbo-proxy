@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>com.dubbo.proxy</groupId>
 	<artifactId>grpc-dubbo-proxy</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 	<name>grpc-dubbo-proxy</name>
 	<description>a grpc proxy server to invoke dubbo service</description>
 	<developers>
@@ -22,17 +22,16 @@
 	</developers>
 	<properties>
 		<java.version>1.8</java.version>
-		<slf4j.version>1.7.26</slf4j.version>
 		<curator.version>2.12.0</curator.version>
 		<dubbo.version>2.7.3</dubbo.version>
-		<grpc.version>1.28.0</grpc.version>
+		<grpc.version>1.30.2</grpc.version>
 	</properties>
 
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
 				<groupId>io.grpc</groupId>
-				<artifactId>grpc-netty-shaded</artifactId>
+				<artifactId>grpc-netty</artifactId>
 				<version>${grpc.version}</version>
 			</dependency>
 			<dependency>
@@ -51,11 +50,6 @@
 				<version>${grpc.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>org.slf4j</groupId>
-				<artifactId>slf4j-api</artifactId>
-				<version>${slf4j.version}</version>
-			</dependency>
-			<dependency>
 				<groupId>org.apache.dubbo</groupId>
 				<artifactId>dubbo</artifactId>
 				<version>${dubbo.version}</version>
@@ -70,13 +64,22 @@
 				<artifactId>curator-recipes</artifactId>
 				<version>${curator.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>com.alibaba</groupId>
+				<artifactId>fastjson</artifactId>
+				<version>1.2.71</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
 	<dependencies>
 		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>io.grpc</groupId>
-			<artifactId>grpc-netty-shaded</artifactId>
+			<artifactId>grpc-netty</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>io.grpc</groupId>

@@ -1,10 +1,7 @@
 package org.apache.dubbo.proxy.serializer;
 
-import org.springframework.stereotype.Component;
-
 import com.google.gson.Gson;
 
-@Component
 public class GsonResultSerializer implements ResultSerializer {
 	
 	private final Gson gson;

@@ -13,7 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import com.google.gson.Gson;
+import com.alibaba.fastjson.JSON;
 import com.google.protobuf.ProtocolStringList;
 
 import io.grpc.Status;
@@ -25,14 +25,13 @@ public final class ProxyServiceGrpcImpl extends ProxyServiceImplBase {
 	private final ApplicationConfig appConfig;
 	private final RegistryConfig registry;
 	private final ResultSerializer serializer;
-	private final Gson gson;
+//	private final Gson gson;
 
-	public ProxyServiceGrpcImpl(ApplicationConfig appConfig, RegistryConfig registry, ResultSerializer serializer,
-			Gson gson) {
+	public ProxyServiceGrpcImpl(ApplicationConfig appConfig, RegistryConfig registry, ResultSerializer serializer) {
 		this.appConfig = appConfig;
 		this.registry = registry;
 		this.serializer = serializer;
-		this.gson = gson;
+//		this.gson = gson;
 	}
 
 	private final Logger logger = LoggerFactory.getLogger(ProxyServiceGrpcImpl.class);
@@ -49,9 +48,8 @@ public final class ProxyServiceGrpcImpl extends ProxyServiceImplBase {
 		Object result = null;
 
 		try {
-			
 			String[] paramTypes = types.toArray(new String[0]);
-			Object[] paramValues = gson.fromJson(typeValues, Object[].class);
+			Object[] paramValues = JSON.parseObject(typeValues, Object[].class);
 			ReferenceConfig<GenericService> reference = getReferencenConfig(interfaceName, group, version);
 			ReferenceConfigCache refConfigCache = ReferenceConfigCache.getCache();
 			GenericService genericService = refConfigCache.get(reference);
