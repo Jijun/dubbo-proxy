@@ -44,6 +44,8 @@ spec:
           env:
           - name: 'spring.profiles.active'
             value: 'product'
+#          - name: 'logging.level.org.apache.dubbo.config'
+#            value: 'ERROR'
           imagePullPolicy: Always
           livenessProbe:
             tcpSocket:
@@ -53,9 +55,9 @@ spec:
               port: 5050
           resources:
             limits:
-              memory: 2048Mi
+              memory: 1024Mi
             requests:
-              memory: 2048Mi
+              memory: 512Mi
           securityContext:
             privileged: false
       dnsPolicy: ClusterFirst
