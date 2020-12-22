@@ -60,3 +60,12 @@ https://github.com/Jijun/grpc-dubbo-proxy/wiki/Get-Started#grpc-java-client
 proxy.registry.address: zookeeper://127.0.0.1:2181   #registry center address, same as Dubbo service's 
 proxy.metadata-report.address: zookeeper://127.0.0.1:2181  #metadata center address, used by paramType search, support for dubbo 2.7 or later
 ```
+
+### build
+
+```bash
+mvn clean package
+docker build -t ccr.ccs.tencentyun.com/eqxiu/grpc-dubbo-proxy .
+docker push ccr.ccs.tencentyun.com/eqxiu/grpc-dubbo-proxy
+kubectl apply -f k8s.yaml
+```
