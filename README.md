@@ -9,7 +9,9 @@ relying on gRPC high performance and message compression, the message body is mo
 SPRING_PROFILES_ACTIVE=product mvn clean spring-boot:run
 ```
  
-Group and version is the mapping data in Dubbo service. 
+### Status
+
+This library is considered production ready.
 
 ### gRPC Protobuf: 
 
@@ -49,6 +51,9 @@ https://github.com/Jijun/grpc-dubbo-proxy/wiki/Get-Started#grpc-node-client
 
 #### Java gRPC Client 
 https://github.com/Jijun/grpc-dubbo-proxy/wiki/Get-Started#grpc-java-client
+
+### Go gRPC Client
+https://github.com/Jijun/grpc-dubbo-proxy/wiki/Get-Started#grpc-go-client
 
 
 

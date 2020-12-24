@@ -3,3 +3,8 @@ spring:
       active: develop
     application:
       name: grpc-dubbo-proxy
+      
+      
+logging:
+  level:
+    org.apache.dubbo.config: ERROR
