@@ -41,6 +41,19 @@ spec:
       containers:
         - name: grpc-dubbo-proxy
           image: ccr.ccs.tencentyun.com/eqxiu/grpc-dubbo-proxy
+          command:
+          - "java"
+          - "-Djava.security.egd=file:/dev/./urandom"
+          - "-Xms1024m"
+          - "-Xmx1024m"
+          - "-XX:+UseG1GC"
+#          - "-XX:ActiveProcessorCount=8"
+#          - "-XX:+UseStringDeduplication"
+#          - "-Dfile.encoding=UTF-8"
+#          - "-Dsun.jnu.encoding=UTF-8"
+#          - "-Djava.awt.headless=true"
+          - "-jar"
+          - "/app.jar"
           env:
           - name: 'spring.profiles.active'
             value: 'product'
@@ -55,9 +68,11 @@ spec:
               port: 5050
           resources:
             limits:
-              memory: 1024Mi
+              memory: 1.5Gi
+              cpu: "1"
             requests:
-              memory: 512Mi
+              cpu: "1"
+              memory: 1.5Gi
           securityContext:
             privileged: false
       dnsPolicy: ClusterFirst
