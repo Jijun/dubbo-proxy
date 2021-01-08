@@ -1,0 +1,157 @@
+apiVersion: v1
+data:
+  nginx.conf: |
+    user  nginx;
+    worker_processes  4;
+
+    error_log  /var/log/nginx/error.log warn;
+    pid        /var/run/nginx.pid;
+
+
+    events {
+        worker_connections  10240;
+    }
+
+    http {
+        include       /etc/nginx/mime.types;
+        default_type  application/octet-stream;
+
+        log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                          '$status $body_bytes_sent "$http_referer" '
+                          '"$http_user_agent" "$http_x_forwarded_for"';
+
+        sendfile        on;
+        #tcp_nopush     on;
+
+        keepalive_timeout  65;
+
+        #gzip  on;
+
+        include /etc/nginx/conf.d/*.conf;
+
+        server {
+            server_name _;
+            listen 80 http2 backlog=10240 reuseport default_server;
+            grpc_socket_keepalive on;
+            grpc_buffer_size 32k;
+            client_body_timeout 60s;
+            keepalive_timeout 7200s;
+            keepalive_requests 3000;
+            http2_max_requests 2048;
+            http2_chunk_size 16k;
+
+            location / {
+                grpc_pass grpc://127.0.0.1:5050;
+            }
+        }
+    }
+kind: ConfigMap
+metadata:
+  name: cm-grpc-dubbo-proxy
+  namespace: eqxiu-ops
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    description: svc-grpc-dubbo-proxy
+    service.kubernetes.io/qcloud-loadbalancer-internal-subnetid: subnet-2tdvvzeh
+  name: svc-grpc-dubbo-proxy
+  namespace: eqxiu-ops
+spec:
+  ports:
+    - name: port
+      port: 5050
+      protocol: TCP
+      targetPort: 5050
+    - name: nginx
+      port: 80
+      protocol: TCP
+      targetPort: 80
+  selector:
+    qcloud-app: grpc-dubbo-proxy
+  sessionAffinity: None
+  type: LoadBalancer
+
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    description: grpc-dubbo-proxy
+  labels:
+    qcloud-app: grpc-dubbo-proxy
+  name: grpc-dubbo-proxy
+  namespace: eqxiu-ops
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      qcloud-app: grpc-dubbo-proxy
+  template:
+    metadata:
+      labels:
+        qcloud-app: grpc-dubbo-proxy
+    spec:
+      containers:
+      - name: grpc-dubbo-proxy
+        image: ccr.ccs.tencentyun.com/eqxiu/grpc-dubbo-proxy
+        env:
+        - name: 'spring.profiles.active'
+          value: 'product'
+        imagePullPolicy: Always
+        livenessProbe:
+          tcpSocket:
+            port: 5050
+        readinessProbe:
+          tcpSocket:
+            port: 5050
+        resources:
+          limits:
+            memory: 1024Mi
+          requests:
+            memory: 512Mi
+        securityContext:
+          privileged: false
+      - name: nginx
+        image: nginx:1.19.6
+        volumeMounts:
+        - name: nginx
+          mountPath: '/etc/nginx/nginx.conf'
+          subPath: "nginx.conf"
+        imagePullPolicy: Always
+        livenessProbe:
+          tcpSocket:
+            port: 80
+        readinessProbe:
+          tcpSocket:
+            port: 80
+        resources:
+          limits:
+            memory: 1024Mi
+          requests:
+            memory: 128Mi
+        securityContext:
+          privileged: false
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: qcloudregistrykey
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: nginx
+        configMap:
+          name: cm-grpc-dubbo-proxy
+          items:
+          - key: "nginx.conf"
+            path: "nginx.conf"
+  revisionHistoryLimit: 5
+  progressDeadlineSeconds: 600
+  minReadySeconds: 10
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
